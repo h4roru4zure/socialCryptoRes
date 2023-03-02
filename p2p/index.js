@@ -84,7 +84,7 @@ function writeMessageToPeerToId (toId, type, data)  {
     peers[id].conn.write(JSON.stringify(
     {
     to: id,
-    from: myPeerId,
+    from: ownPeerId,
     type: type,
     data: data
     }

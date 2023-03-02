@@ -1,10 +1,9 @@
 import  {BlockHeader}  from './block.js';
 import  {Block}  from './block.js';
 import  sha256 from 'crypto-js/sha256.js';
-//import {random} from 'crypto-js/core.js';
 import moment from "moment";
 import pkg from 'crypto-js/core.js';
-//const {random} = pkg;
+
 import randomBytes from 'randombytes';
 
 let getGenesisBlock = () => {
@@ -15,7 +14,7 @@ let getGenesisBlock = () => {
         "0x1bc3300000000000000000000000000000000000000000000", moment().unix(),dificultyLevel,nonceNumber);
     return new Block(blockHeader, 0, null);
 };
-const blockchain = [getGenesisBlock()];
+
 let getLatestBlock = () => blockchain[blockchain.length-1];
 let addBlock = (newBlock) => {
     let prevBlock = getLatestBlock();
@@ -30,12 +29,7 @@ let getBlock = (index) => {
     else
     return null;
 }
+const blockchain = [getGenesisBlock()];
 
-// if (typeof exports != 'undefined' ) {
-// exports.addBlock = addBlock;
-// exports.getBlock = getBlock;
-// exports.blockchain = blockchain;
-// exports.getLatestBlock = getLatestBlock;
-// }
 
 export {addBlock,getBlock,blockchain,getLatestBlock};
