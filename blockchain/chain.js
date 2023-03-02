@@ -2,9 +2,10 @@ import  {BlockHeader}  from './block.js';
 import  {Block}  from './block.js';
 import  sha256 from 'crypto-js/sha256.js';
 import moment from "moment";
+import randomBytes from 'randombytes';
 import pkg from 'crypto-js/core.js';
 
-import randomBytes from 'randombytes';
+
 
 let getGenesisBlock = () => {
     let message='socialCrytoRes';

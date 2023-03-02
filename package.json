@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "cron": "^2.2.0",
     "crypto-js": "^4.1.1",
     "crypto-random": "^2.0.1",
     "dat-swarm-defaults": "file:dat-swarm-defaults",
