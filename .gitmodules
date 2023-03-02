@@ -1,0 +1,9 @@
+[submodule "discovery-swarm"]
+	path = discovery-swarm
+	url = https://github.com/mafintosh/discovery-swarm.git
+[submodule "discovery-swarm-stream"]
+	path = discovery-swarm-stream
+	url = https://github.com/RangerMauve/discovery-swarm-stream.git
+[submodule "dat-swarm-defaults"]
+	path = dat-swarm-defaults
+	url = https://github.com/dat-ecosystem-archive/dat-swarm-defaults.git
