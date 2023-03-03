@@ -67,11 +67,12 @@ const generateNextBlock = (txns) => {
         prevMerkleRoot = prevBlock.blockHeader.merkleRoot;
         
     let nextIndex = prevBlock.index + 1,
-        nextTime = moment().unix(),
-        nextMerkleRoot = CryptoJS.SHA256(1, prevMerkleRoot, nextTime).toString();
+    nextTime = moment().unix(),
+    nextMerkleRoot = CryptoJS.SHA256(1, prevMerkleRoot, nextTime).toString();
     const blockHeader = new BlockHeader(1, prevMerkleRoot, nextMerkleRoot, nextTime);
     const newBlock = new Block(blockHeader, nextIndex, txns);
     blockchain.push(newBlock);
+    storeBlock(newBlock);
     return newBlock;
 };
 
