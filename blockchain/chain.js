@@ -30,7 +30,19 @@ let getBlock = (index) => {
     else
     return null;
 }
-const blockchain = [getGenesisBlock()];
+let blockchain = [getGenesisBlock()];
 
+const generateNextBlock = (txns) => {
+    const prevBlock = getLatestBlock(),
+        prevMerkleRoot = prevBlock.blockHeader.merkleRoot;
+        nextIndex = prevBlock.index + 1,
+        nextTime = moment().unix(),
+        nextMerkleRoot = CryptoJS.SHA256(1, prevMerkleRoot, nextTime).toString();
 
-export {addBlock,getBlock,blockchain,getLatestBlock};
+    const blockHeader = new BlockHeader(1, prevMerkleRoot, nextMerkleRoot, nextTime);
+    const newBlock = new Block(blockHeader, nextIndex, txns);
+    blockchain.push(newBlock);
+    return newBlock;
+};
+
+export {addBlock,getBlock,blockchain,getLatestBlock,generateNextBlock};
