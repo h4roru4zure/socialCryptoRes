@@ -1,14 +1,22 @@
  class BlockHeader {
     
-    constructor(version, previousBlockHeader, merkleRoot, time,dificultyLevel,nonceNumber) 
-   {
-    this.version = version;
-    this.previousBlockHeader = previousBlockHeader;
-    this.merkleRoot = merkleRoot;
-    this.time = time;
-    this.dificultyLevel=dificultyLevel;
-    this.nonceNumber=nonceNumber;
-    }
+    constructor(version, previousBlockHeader, merkleRoot, time) 
+       {
+        this.version = version;
+        this.previousBlockHeader = previousBlockHeader;
+        this.merkleRoot = merkleRoot;
+        this.time = time;
+        }
+
+//     constructor(version, previousBlockHeader, merkleRoot, time,dificultyLevel,nonceNumber) 
+//    {
+//     this.version = version;
+//     this.previousBlockHeader = previousBlockHeader;
+//     this.merkleRoot = merkleRoot;
+//     this.time = time;
+//     this.dificultyLevel=dificultyLevel;
+//     this.nonceNumber=nonceNumber;
+//     }
    };
 
 class Block {

@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import defaults from 'dat-swarm-defaults'
 import getport from 'get-port';
 import Swarm from 'discovery-swarm';
-import {addBlock,getBlock,blockchain,getLatestBlock,generateNextBlock} from '../blockchain/chain.js';
+import {addBlock,getBlock,blockchain,getLatestBlock,generateNextBlock,storeBlock,getDbBlock,createDb} from '../blockchain/chain.js';
 import {CronJob} from 'cron';
 
 console.log("========================================");
@@ -13,13 +13,15 @@ const peers = {};
 let connSeq = 0;
 let channel = 'myChanelSocialCrypto';
 const puerto = getport;
-const ownPeerId=nanoid(8);
+const ownPeerId=nanoid(32);
 
 console.log('1.- ownPeerId  : ' + ownPeerId);
 //console.log('2.- Numero hex : ',ownPeerId.toString('hex'));
 const config = defaults({
     id: ownPeerId,
 });
+
+createDb(ownPeerId.toString('hex'));
 
 let messageType = {
     REQUEST_BLOCK: 'requestBlock',
@@ -151,9 +153,9 @@ function writeMessageToPeerToId (toId, type, data)  {
     }
 };
 
-setTimeout(function(){
-    writeMessageToPeers('hello', null);
-        }, 2000);
+// setTimeout(function(){
+//     writeMessageToPeers('hello', null);
+//         }, 2000);
 
 
 //---finalizando primera parte.
