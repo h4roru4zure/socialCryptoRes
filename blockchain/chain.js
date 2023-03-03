@@ -37,6 +37,7 @@ let addBlock = (newBlock) => {
     if (prevBlock.index < newBlock.index && newBlock.
     blockHeader.previousBlockHeader === prevBlock.blockHeader.merkleRoot) {
         blockchain.push(newBlock);
+        storeBlock(newBlock);
     }
 }
 let storeBlock = (newBlock) => {
@@ -64,10 +65,10 @@ let blockchain = [getGenesisBlock()];
 const generateNextBlock = (txns) => {
     const prevBlock = getLatestBlock(),
         prevMerkleRoot = prevBlock.blockHeader.merkleRoot;
-        nextIndex = prevBlock.index + 1,
+        
+    let nextIndex = prevBlock.index + 1,
         nextTime = moment().unix(),
         nextMerkleRoot = CryptoJS.SHA256(1, prevMerkleRoot, nextTime).toString();
-        console.log("genera el siguente blocke");
     const blockHeader = new BlockHeader(1, prevMerkleRoot, nextMerkleRoot, nextTime);
     const newBlock = new Block(blockHeader, nextIndex, txns);
     blockchain.push(newBlock);

@@ -43,6 +43,9 @@ const swarm = Swarm(config);
     swarm.on('connection', (conn, info) => {
         const seq = connSeq;
         const peerId = info.id.toString('hex');
+        console.log("*********************************************************");
+        console.log("*************Inciando coneccion Swarm.on ****************");
+        console.log("*********************************************************");
         console.log(`Connected #${seq} to peer: ${peerId}`);
 
         if (info.initiator) {
@@ -64,7 +67,7 @@ const swarm = Swarm(config);
             );
             console.log('----------- Received Message end -------------');
 
-            switch (messageType) {
+            switch (message.type) {
                 case messageType.REQUEST_BLOCK:
                     console.log('-----------REQUEST_BLOCK-------------');
                     let requestedIndex = (JSON.parse(JSON.stringify(message.data))).index;
@@ -78,14 +81,14 @@ const swarm = Swarm(config);
                 case messageType.RECEIVE_NEXT_BLOCK:
                     console.log('-----------RECEIVE_NEXT_BLOCK-------------');
                     addBlock(JSON.parse(JSON.stringify(message.data)));
-                    console.log('Blockchain: ' + JSON.stringify(chain.blockchain));
+                    console.log('Blockchain: ' + JSON.stringify(blockchain));
                     let nextBlockIndex =getLatestBlock().index+1;
                     console.log('-- request next block @ index: ' + nextBlockIndex);
-                    writeMessageToPeers(MessageType.REQUEST_BLOCK, {index: nextBlockIndex});
+                    writeMessageToPeers(messageType.REQUEST_BLOCK, {index: nextBlockIndex});
                     console.log('-----------RECEIVE_NEXT_BLOCK-------------');
                     break;
                 case messageType.RECEIVE_NEW_BLOCK:
-                    if ( message.to === myPeerId.toString('hex') && message.from !== ownPeerId.toString('hex')) {
+                    if ( message.to === ownPeerId.toString('hex') && message.from !== ownPeerId.toString('hex')) {
                         console.log('-----------RECEIVE_NEW_BLOCK------------- ' + message.to);
                         addBlock(JSON.parse(JSON.stringify(message.data)));
                         console.log(JSON.stringify(blockchain));
@@ -94,7 +97,7 @@ const swarm = Swarm(config);
                     break;
                 case messageType.REQUEST_ALL_REGISTER_MINERS:
                     console.log('-----------REQUEST_ALL_REGISTER_MINERS------------- ' + message.to);
-                    writeMessageToPeers(MessageType.REGISTER_MINER, registeredMiners);
+                    writeMessageToPeers(messageType.REGISTER_MINER, registeredMiners);
                     registeredMiners = JSON.parse(JSON.stringify(message.data));
                     console.log('-----------REQUEST_ALL_REGISTER_MINERS------------- ' + message.to);
                     break;
@@ -109,7 +112,7 @@ const swarm = Swarm(config);
         });
 
         conn.on('close', () => {
-            console.log(`Connection ${seq} closed, peerId: ${peerId}`);
+           console.log(`Connection ${seq} closed, peerId: ${peerId}`);
             if (peers[peerId].seq === seq) {
                 delete peers[peerId];
                 console.log('--- registeredMiners before: ' + JSON.stringify(registeredMiners));
@@ -128,9 +131,6 @@ const swarm = Swarm(config);
         connSeq++
     })
 })();
-
-//=================================================
-//=================================================
 
 
 function writeMessageToPeers  (type, data)  {
@@ -153,16 +153,9 @@ function writeMessageToPeerToId (toId, type, data)  {
     }
 };
 
-// setTimeout(function(){
-//     writeMessageToPeers('hello', null);
-//         }, 2000);
-
-
-//---finalizando primera parte.
-
-//---iniciando la segunda parte.
-
-
+setTimeout(function(){
+    writeMessageToPeers('hello', null);
+        }, 2000);
 
 function sendMessage(id, type, data) {
     peers[id].conn.write(JSON.stringify(
@@ -181,7 +174,7 @@ setTimeout(function(){
 
 setTimeout(function(){
     writeMessageToPeers(messageType.REQUEST_BLOCK, {index: getLatestBlock().index+1});
-}, 5000);
+}, 5500);
 
 setTimeout(function(){
     registeredMiners.push(ownPeerId.toString('hex'));
@@ -192,21 +185,17 @@ setTimeout(function(){
 }, 7000);
 
 
-//----------------------------------------------------//----------------------------------------------------
-//--------------------------------------- Agregando mineros -------------------------------------
-//----------------------------------------------------//----------------------------------------------------
-//----------------------------------------------------//----------------------------------------------------
-
-
 let registeredMiners = [];
 let lastBlockMinedBy = null;
 
-
-let paramCron = function(){
+const job = new CronJob(' 1 * * * * *',function(){
     let index = 0; // first block
+    console.log("======================== job italian ===============");
     if (lastBlockMinedBy) {
         let newIndex = registeredMiners.indexOf(lastBlockMinedBy);
+        console.log("El Nuevo Indice es : ",newIndex);
         index = ( newIndex+1 > registeredMiners.length-1) ? 0 : newIndex + 1;
+        console.log("El ***** Indice es : ",index);
     }
 
     lastBlockMinedBy = registeredMiners[index];
@@ -222,12 +211,9 @@ let paramCron = function(){
     console.log(JSON.stringify(blockchain));
     console.log('-----------create next block -----------------');
     }
-   }
+   });
 
-//const job = CronJob(' 10 * * * * *',paramCron,null,true, 'America/Los_Angeles');
-const job = CronJob(' 1 * * * * *',paramCron);
+console.log("==============Inicia el Cron Job ===============");
+job.start();
 
-job.start;
-
-//finalizando los trabajos basicos con el cronjob.
     

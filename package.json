@@ -7,6 +7,7 @@
     "dat-swarm-defaults": "file:dat-swarm-defaults",
     "discovery-swarm": "file:discovery-swarm",
     "discovery-swarm-stream": "file:discovery-swarm-stream",
+    "elliptic": "^6.5.4",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "get-port": "^6.1.2",
